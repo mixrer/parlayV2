@@ -48,5 +48,3 @@ async function renderNext(game){
 async function getVenue(teamName){ return 'Stadium TBD'; }
 
 async function computeTop5(gameId){ return [{player:'Player A', market:'Receptions', line:'5.5', edge:0.07}]; }
-
-}
