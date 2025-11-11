@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>API CONFIG</title>
+</head>
+<body>
+<script>
+/* --------------  KEYS  -------------- */
+window.API_KEYS = {
+  odds:  'b21e87f0d5e4b7067939592589ae4612',
+  football: '38758d304533a5d2e48750a6376ea25b'
+};
+
+/* --------------  HELPERS  -------------- */
+window.API = {
+  async odds(endpoint){   // endpoint = /v4/sports/upcoming/odds, etc.
+     const url = `https://api.the-odds-api.com${endpoint}?apiKey=${API_KEYS.odds}&regions=us&markets=player_props`;
+     const r = await fetch(url);
+     return r.json();
+  },
+
+  async football(endpoint){ // endpoint = /players, /fixtures, /players/{id}/statistics
+     const url = `https://v3.football.api-sports.io${endpoint}`;
+     const r = await fetch(url, {headers:{'x-apisports-key':API_KEYS.football}});
+     return r.json();
+  }
+};
+</script>
+</body>
+</html>

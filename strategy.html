@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Betting Model Knobs</title>
+  <style>body{font-family:monospace;max-width:800px;margin:auto}</style>
+</head>
+<body>
+  <h1>Confidence-Interval Model</h1>
+
+  <h2>Rationale (read-only)</h2>
+  <pre>
+1. Pull player game-logs this season + last-two-season vs same opponent.
+2. Build 90 % t-interval around the stat mean.
+3. Convert FanDuel price → implied probability.
+4. Edge = (1-implied) – P(stat ≥ line).
+5. Rank by edge; take top 5 per game.
+  </pre>
+
+  <h2>Tweak Knobs</h2>
+  <label>Confidence level
+    <input id="conf" type="range" min="0.80" max="0.95" step="0.05" value="0.90">
+    <span id="confOut">0.90</span>
+  </label><br>
+
+  <label>Seasons back
+    <select id="back">
+      <option value="1">1</option>
+      <option value="2" selected>2</option>
+    </select>
+  </label><br>
+
+  <label>Min sample size
+    <input id="minN" type="number" min="3" max="10" value="5">
+  </label>
+
+  <button onclick="saveKnobs()">Save to localStorage</button>
+
+  <script>
+    function loadKnobs(){
+      const k = JSON.parse(localStorage.getItem('knobs')||'{"conf":0.90,"back":2,"minN":5}');
+      document.getElementById('conf').value = k.conf;
+      document.getElementById('back').value = k.back;
+      document.getElementById('minN').value = k.minN;
+      document.getElementById('confOut').textContent = k.conf;
+    }
+    function saveKnobs(){
+      const k = {
+        conf: parseFloat(document.getElementById('conf').value),
+        back: parseInt(document.getElementById('back').value),
+        minN: parseInt(document.getElementById('minN').value)
+      };
+      localStorage.setItem('knobs', JSON.stringify(k));
+      alert('Saved – refresh index.html to use new values');
+    }
+    document.getElementById('conf').oninput = e => document.getElementById('confOut').textContent = e.target.value;
+    loadKnobs();
+  </script>
+</body>
+</html>
